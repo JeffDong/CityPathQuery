@@ -18,6 +18,18 @@ public class PathUnit {
 	private double averageScore;//平均分数
 	private ArrayList<Advice> advices; //得到的所有评论
 	
+	private static int counter = 0;
+	
+	public PathUnit (Coordinate startPoint, Coordinate endPoint){
+		this.startPoint = startPoint;
+		this.endPoint = endPoint;
+		this.scoredTimes = 0;
+		this.averageScore = 0;
+		this.advices = new ArrayList<Advice>();
+		this.ID = counter;
+		counter ++;
+	}
+	
 	
 	/**
 	 * 
@@ -29,6 +41,26 @@ public class PathUnit {
 		//通过起点与终点计算距离
 		
 		return distance;
+	}
+
+
+	public Coordinate getStartPoint() {
+		return startPoint;
+	}
+
+
+	public void setStartPoint(Coordinate startPoint) {
+		this.startPoint = startPoint;
+	}
+
+
+	public Coordinate getEndPoint() {
+		return endPoint;
+	}
+
+
+	public void setEndPoint(Coordinate endPoint) {
+		this.endPoint = endPoint;
 	}
 	
 	
