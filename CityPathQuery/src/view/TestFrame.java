@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -17,10 +18,14 @@ public class TestFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public AbstractMap absMap;
+	public MapPanel mapPanel;
 
 	public TestFrame () {
 		Map map = TranslateMapFile.translateMap();
-		add(new MapPanel(map));
+		mapPanel = new MapPanel(map);
+		add(mapPanel);
+		absMap = new AbstractMap(map);
 	}
 	
 	public static void main(String[] args) {
@@ -30,6 +35,11 @@ public class TestFrame extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1024, 768);
 		frame.setVisible(true);
+		
+		Coordinate startCoor = new Coordinate(50, 300);
+		Coordinate endCoor = new Coordinate(1000, 500);
+		Path path = frame.absMap.findPath(startCoor, endCoor);
+		frame.mapPanel.paintPath(path);
 	}
 }
 	
@@ -42,8 +52,11 @@ class MapPanel extends JPanel{
 	
 	private Map map;
 	
+	private Path currentPath;
+	
 	public MapPanel(Map map) {
 		this.map = map;
+		currentPath = new Path();
 	}
 	
 	public MapPanel() {
@@ -54,15 +67,16 @@ class MapPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		paintMap(g, map);
+		paintPath(g, currentPath);
 		
 	}
 	
 	private void paintMap(Graphics g, Map map) {
-		paintPath(g, map.getPathUnitList());
+		paintPathUnits(g, map.getPathUnitList());
 		paintLocation(g, map.getLocationList());
 	}
 	
-	private void paintPath(Graphics g, ArrayList<PathUnit> pathUnitList) {
+	private void paintPathUnits(Graphics g, ArrayList<PathUnit> pathUnitList) {
 		for (PathUnit pathUnit : pathUnitList) {
 			int x1 = (int) pathUnit.getStartPoint().getX();
 			int y1 = (int) pathUnit.getStartPoint().getY();
@@ -82,5 +96,28 @@ class MapPanel extends JPanel{
 			
 		}
 	}
+	
+	private void paintPath(Graphics g, Path path) {
+		// Graphics g = getGraphics();
+		ArrayList<PathUnit> pathUnits = path.getPathUnitList();
+		Color originColor = g.getColor();
+
+		// test
+		for (PathUnit p : pathUnits) {
+			System.out.println("start point : " + p.getStartPoint().getX()
+					+ "  " + p.getStartPoint().getY() + "  "
+					+ p.getEndPoint().getX() + "  " + p.getEndPoint().getY());
+		}
+
+		g.setColor(Color.red);
+		paintPathUnits(g, pathUnits);
+		g.setColor(originColor);
+	}
+	 
+	public void paintPath(Path path) {
+		currentPath = path;
+		repaint();
+	}
+	 
 }
 

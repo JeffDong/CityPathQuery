@@ -13,9 +13,23 @@ public class Path {
 	private Coordinate startPoint;
 	private Coordinate endPoint;
 	
+	public Path() {
+		pathUnitList = new ArrayList<PathUnit>();
+	}
+	
 	double getScore () {
 		double score = -1;
 		//遍历pathUnitList计算路径的分数
 		return score;
 	}
+	
+	double getLength() {
+		return startPoint.getDistance(endPoint);
+	}
+
+	public ArrayList<PathUnit> getPathUnitList() {
+		return pathUnitList;
+	}
+	
+	
 }
